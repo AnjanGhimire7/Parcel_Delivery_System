@@ -10,9 +10,9 @@ dotenv.config({
 
 connectDB()
   .then(() => {
-    const run = () => {
-      cron.schedule("* * * * * *", async () => {
-        console.log("hello from corn job");
+    const run =  () => {
+      cron.schedule("* * * * * *", async () => { // send mail after every second
+      
 
         await SendParcelPendingEmail();
       });
