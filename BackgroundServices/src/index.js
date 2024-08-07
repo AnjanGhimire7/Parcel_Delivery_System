@@ -1,33 +1,28 @@
 import connectDB from "./database/db.js";
 import dotenv from "dotenv";
+import { SendParcelPendingEmail } from "./EmailServices/PendingParcel.js";
+import cron from "node-cron";
 import { app } from "./app.js";
-import cluster from "node:cluster";
-import os from "node:os";
-const totalCpu = os.cpus().length;
 
 dotenv.config({
   path: "./.env",
 });
-if (cluster.isPrimary) {
-  console.log(`Primary ${process.pid} is running`);
 
-  // Fork workers.
-  for (let i = 0; i < totalCpu; i++) {
-    cluster.fork();
-  }
-  cluster.on("exit", (worker, code, signal) => {
-    console.log(`Worker process ${worker.process.pid} died. Restarting...`);
-    cluster.fork();
-  });
-} else {
-  connectDB()
-    .then(() => {
-      app.listen(process.env.PORT || 5000, () => {
-        console.log(`server is running on the port:${process.env.PORT}`);
+connectDB()
+  .then(() => {
+    const run = () => {
+      cron.schedule("* * * * * *", async () => {
+        console.log("hello from corn job");
+
+        await SendParcelPendingEmail();
       });
-    })
-    .catch((error) => {
-      console.log("Mongodb connection failed!!!", error);
+    };
+
+    run();
+    app.listen(process.env.PORT || 5000, () => {
+      console.log(`server is running on the port:${process.env.PORT}`);
     });
-  console.log(`Worker ${process.pid} is running`);
-}
+  })
+  .catch((error) => {
+    console.log("Mongodb connection failed!!!", error);
+  });

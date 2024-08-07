@@ -47,7 +47,7 @@ const parcelSchema = new Schema(
       type: String,
       enum: AvailableOrderStatus,
       required: true,
-      default: OrderStatusEnum.PENDING,
+      default: OrderStatusEnum.CANCELLED,
     },
   },
   {

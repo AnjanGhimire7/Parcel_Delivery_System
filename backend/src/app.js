@@ -24,5 +24,5 @@ import parcelRouter from "./routes/parcel.route.js";
 
 //route declaration
 app.use("/api/v1/users", userRouter);
-app.use("/api/v1/parcel", parcelRouter);
+app.use("/api/v1/parcels", parcelRouter);
 export { app };
