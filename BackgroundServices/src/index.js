@@ -1,6 +1,7 @@
 import connectDB from "./database/db.js";
 import dotenv from "dotenv";
 import { SendParcelPendingEmail } from "./EmailServices/PendingParcel.js";
+import { SendParcelDeliveredEmail } from "./EmailServices/deliverdParcel.js";
 import cron from "node-cron";
 import { app } from "./app.js";
 
@@ -12,9 +13,9 @@ connectDB()
   .then(() => {
     const run = () => {
       cron.schedule("* * * * * *", async () => {
-        console.log("hello from corn job");
-
+        // send email after every second
         await SendParcelPendingEmail();
+        await SendParcelDeliveredEmail();
       });
     };
 
