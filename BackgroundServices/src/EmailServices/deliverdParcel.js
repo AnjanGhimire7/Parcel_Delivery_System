@@ -4,18 +4,18 @@ import ejs from "ejs";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
-import {OrderStatusEnum } from "../constant.js"
+import { OrderStatusEnum } from "../constant.js";
 
-const SendParcelPendingEmail = async () => {
-  const parcels = await Parcel.find({ status: OrderStatusEnum.CANCELLED});
+const SendParcelDeliveredEmail = async () => {
+  const parcels = await Parcel.find({ status: OrderStatusEnum.PENDING });
+
   if (parcels.length > 0) {
     for (let parcel of parcels) {
       const __dirname = dirname(fileURLToPath(import.meta.url));
 
       let pathname = path.join(__dirname, "../");
-
       ejs.renderFile(
-        `${pathname}/views/pendingparcel.ejs`,
+        `${pathname}/deliveredparcel.ejs`,
         {
           sendername: parcel.sendername,
           from: parcel.from,
@@ -29,7 +29,7 @@ const SendParcelPendingEmail = async () => {
           let messageoption = {
             from: process.env.EMAIL,
             to: parcel.senderemail,
-            subject: "You've send the parcel",
+            subject: "Your parcel has been delivered",
             html: data,
           };
 
@@ -42,8 +42,7 @@ const SendParcelPendingEmail = async () => {
       );
 
       ejs.renderFile(
-        `${pathname}/views/pendingparcel.ejs`,
-
+        `${pathname}/deliveredparcel.ejs`,
         {
           sendername: parcel.sendername,
           from: parcel.from,
@@ -57,14 +56,14 @@ const SendParcelPendingEmail = async () => {
           let messageoption = {
             from: process.env.EMAIL,
             to: parcel.recipientemail,
-            subject: "You've recieved a parcel",
+            subject: "You have got the parcel",
             html: data,
           };
 
           try {
             sendMail(messageoption);
             await Parcel.findByIdAndUpdate(parcel._id, {
-              $set: { status: OrderStatusEnum.PENDING },
+              $set: { status: OrderStatusEnum.DELIVERED },
             });
           } catch (error) {
             console.log(err);
@@ -74,5 +73,4 @@ const SendParcelPendingEmail = async () => {
     }
   }
 };
-
-export { SendParcelPendingEmail };
+export { SendParcelDeliveredEmail };
