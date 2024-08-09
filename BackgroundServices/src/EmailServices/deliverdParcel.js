@@ -14,8 +14,9 @@ const SendParcelDeliveredEmail = async () => {
       const __dirname = dirname(fileURLToPath(import.meta.url));
 
       let pathname = path.join(__dirname, "../");
+
       ejs.renderFile(
-        `${pathname}/deliveredparcel.ejs`,
+        `${pathname}/views/deliveredparcel.ejs`,
         {
           sendername: parcel.sendername,
           from: parcel.from,
@@ -42,7 +43,7 @@ const SendParcelDeliveredEmail = async () => {
       );
 
       ejs.renderFile(
-        `${pathname}/deliveredparcel.ejs`,
+        `${pathname}/views/deliveredparcel.ejs`,
         {
           sendername: parcel.sendername,
           from: parcel.from,
