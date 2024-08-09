@@ -23,7 +23,7 @@ const sendMail = async (messageoption) => {
     if (error) {
       console.log(error);
     }
-    console.log(info?.response);
+    console.log(`Email sent successfully !!!${info.response}`);
   });
 };
 

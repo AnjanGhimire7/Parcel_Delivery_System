@@ -81,7 +81,7 @@ const updateParcel = asyncHandler(async (req, res) => {
   }
   const parcel = await Parcel.findById(parcelId);
   if (!parcel) {
-    throw new ApiError(500, "No parcel found!!!");
+    throw new ApiError(404, "No parcel found!!!");
   }
   const parcelUpdate = await Parcel.findByIdAndUpdate(
     parcelId,
@@ -119,7 +119,7 @@ const getUserParcel = asyncHandler(async (req, res) => {
     .skip(pageSkip)
     .limit(pageLimit);
   if (!parcels) {
-    throw new ApiError(500, "parcel not found!!!");
+    throw new ApiError(404, "parcel not found!!!");
   }
   return res
     .status(200)
@@ -140,7 +140,7 @@ const getOneParcel = asyncHandler(async (req, res) => {
   }
   const parcel = await Parcel.findById(parcelId);
   if (!parcel) {
-    throw new ApiError(500, "No parcel found!!!");
+    throw new ApiError(404, "No parcel found!!!");
   }
   return res
     .status(200)
